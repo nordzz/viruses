@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Компьютерные вирусы</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech&family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans', sans-serif;
+            color: #fff;
+            background: linear-gradient(90deg, rgba(42, 123, 155, 1) 0%, rgba(87, 199, 133, 1) 90%, rgba(237, 221, 83, 1) 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 0;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+        
+        .logo {
+            font-family: 'Share Tech', sans-serif;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+        
+        nav a:hover {
+            opacity: 0.8;
+        }
+        
+        .active a {
+            text-decoration: underline;
+        }
+        
+        .hero {
+            display: block;
+            padding: 60px 0;
+            flex: 1;
+            text-align: center;
+        }
+        
+        .content-section, .quiz-section {
+            display: none;
+            padding: 40px 0;
+            flex: 1;
+        }
+        
+        .content-section.active, .quiz-section.active {
+            display: block;
+        }
+        
+        .section-title {
+            font-family: 'Share Tech', sans-serif;
+            font-size: 32px;
+            margin-bottom: 30px;
+            color: #fff;
+            text-align: center;
+        }
+        
+        .section-subtitle {
+            font-size: 24px;
+            margin: 25px 0 15px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .section-text {
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .section-list {
+            margin-left: 30px;
+            margin-bottom: 20px;
+        }
+        
+        .section-list li {
+            margin-bottom: 10px;
+        }
+        
+        .hero--info {
+            max-width: 100%;
+        }
+        
+        .hero h1 {
+            font-size: 42px;
+            margin-bottom: 20px;
+            font-family: 'Share Tech', sans-serif;
+        }
+        
+        .hero h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .hero p {
+            margin-bottom: 30px;
+            line-height: 1.6;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .btn {
+            background-color: #fff;
+            color: rgba(42, 123, 155, 1);
+            border: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            margin: 10px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+        }
+        
+        .quiz-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 10px;
+        }
+        
+        .question {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .question-text {
+            font-size: 20px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .option {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 12px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .option:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .option.selected {
+            background-color: rgba(42, 123, 155, 0.7);
+        }
+        
+        .option.correct {
+            background-color: rgba(87, 199, 133, 0.7);
+        }
+        
+        .option.incorrect {
+            background-color: rgba(255, 99, 71, 0.7);
+        }
+        
+        .result {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .footer {
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 20px 0;
+            text-align: center;
+            margin-top: auto;
+        }
+        
+        .footer p {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+            
+            nav ul {
+                gap: 10px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .quiz-container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav>
+                <ul>
+                    <li class="active"><a href="#" onclick="showSection('main')">сделал: Максимов Владимир</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <div class="hero" id="main-section">
+            <div class="hero--info">
+                <h1>Компьютерные вирусы</h1>
+                <p>Массовое появление компьютерных вирусов началось в 1980-х годах с распространением персональных компьютеров. В 1982 году появился первый массовый вирус Elk Cloner, созданный американским школьником, который заражал компьютеры Apple.</p>
+                <button class="btn" onclick="showSection('quiz')">Проверить знания</button>
+                <button class="btn" onclick="showSection('content')">Основной материал</button>
+            </div>
+        </div>
+
+        <div class="content-section" id="content-section">
+            <h1 class="section-title">Основной материал</h1>
+            
+            <h2 class="section-subtitle">История появления</h2>
+            <p class="section-text">Первые компьютерные вирусы появились в 1970-х годах, когда исследователи начали экспериментировать с самовоспроизводящимися программами. Однако массовое распространение вирусов началось в 1980-х годах с развитием персональных компьютеров и сетевых технологий.</p>
+            
+            <h2 class="section-subtitle">Классификация вирусов</h2>
+            <p class="section-text">По способу распространения выделяют:</p>
+            <ul class="section-list">
+                <li>Сетевые вирусы</li>
+                <li>Файловые вирусы</li>
+                <li>Загрузочные вирусы</li>
+                <li>Макровирусы</li>
+            </ul>
+            
+            <p class="section-text">По механизму действия различают:</p>
+            <ul class="section-list">
+                <li>Резидентные вирусы (остаются в памяти компьютера)</li>
+                <li>Нерезидентные вирусы (не остаются в памяти)</li>
+                <li>Черви (самовоспроизводящиеся программы)</li>
+                <li>Троянские программы (маскирующиеся под полезные приложения)</li>
+            </ul>
+            
+            <h2 class="section-subtitle">Способы распространения</h2>
+            <p class="section-text">Основные каналы распространения вирусов:</p>
+            <ul class="section-list">
+                <li>Внешние носители информации</li>
+                <li>Электронная почта</li>
+                <li>Сетевые ресурсы</li>
+                <li>Вредоносные веб-сайты</li>
+                <li>Уязвимости программного обеспечения</li>
+            </ul>
+            
+            <h2 class="section-subtitle">Последствия заражения</h2>
+            <p class="section-text">Ущерб от вирусов может проявляться в различных формах:</p>
+            <ul class="section-list">
+                <li>Потеря или повреждение данных</li>
+                <li>Кража конфиденциальной информации</li>
+                <li>Снижение производительности системы</li>
+                <li>Превращение компьютера в часть ботнета</li>
+                <li>Финансовые потери</li>
+            </ul>
+            
+            <h2 class="section-subtitle">Методы защиты</h2>
+            <p class="section-text">Современные методы защиты включают:</p>
+            <ul class="section-list">
+                <li>Использование антивирусного ПО</li>
+                <li>Регулярное обновление программного обеспечения</li>
+                <li>Создание резервных копий данных</li>
+                <li>Применение межсетевых экранов</li>
+                <li>Использование сложных паролей</li>
+                <li>Ограничение прав доступа</li>
+                <li>Критическое отношение к электронной почте и файлам из неизвестных источников</li>
+            </ul>
+        </div>
+
+        <div class="quiz-section" id="quiz-section">
+            <h1 class="section-title">Викторина по компьютерным вирусам</h1>
+            
+            <div class="quiz-container">
+                <div class="question">
+                    <div class="question-text">1. Как называется первый массовый компьютерный вирус, созданный в 1982 году?</div>
+                    <div class="options">
+                        <div class="option" onclick="selectAnswer(this, 0, 1)">ILOVEYOU</div>
+                        <div class="option" onclick="selectAnswer(this, 0, 2)">Melissa</div>
+                        <div class="option" onclick="selectAnswer(this, 0, 0)">Elk Cloner</div>
+                        <div class="option" onclick="selectAnswer(this, 0, 3)">MyDoom</div>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <div class="question-text">2. Какие вирусы маскируются под полезные программы?</div>
+                    <div class="options">
+                        <div class="option" onclick="selectAnswer(this, 1, 0)">Троянские программы</div>
+                        <div class="option" onclick="selectAnswer(this, 1, 1)">Черви</div>
+                        <div class="option" onclick="selectAnswer(this, 1, 2)">Файловые вирусы</div>
+                        <div class="option" onclick="selectAnswer(this, 1, 3)">Макровирусы</div>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <div class="question-text">3. Какой из этих вирусов распространяется через электронную почту?</div>
+                    <div class="options">
+                        <div class="option" onclick="selectAnswer(this, 2, 0)">ILOVEYOU</div>
+                        <div class="option" onclick="selectAnswer(this, 2, 1)">Чернобыль (CIH)</div>
+                        <div class="option" onclick="selectAnswer(this, 2, 2)">Stuxnet</div>
+                        <div class="option" onclick="selectAnswer(this, 2, 3)">Zeus</div>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <div class="question-text">4. Какие вирусы заражают документы Microsoft Office?</div>
+                    <div class="options">
+                        <div class="option" onclick="selectAnswer(this, 3, 0)">Загрузочные вирусы</div>
+                        <div class="option" onclick="selectAnswer(this, 3, 1)">Макровирусы</div>
+                        <div class="option" onclick="selectAnswer(this, 3, 2)">Сетевые черви</div>
+                        <div class="option" onclick="selectAnswer(this, 3, 3)">Руткиты</div>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <div class="question-text">5. Что НЕ является методом защиты от вирусов?</div>
+                    <div class="options">
+                        <div class="option" onclick="selectAnswer(this, 4, 0)">Регулярное обновление ПО</div>
+                        <div class="option" onclick="selectAnswer(this, 4, 1)">Использование антивируса</div>
+                        <div class="option" onclick="selectAnswer(this, 4, 2)">Открытие вложений из неизвестных писем</div>
+                        <div class="option" onclick="selectAnswer(this, 4, 3)">Создание резервных копий</div>
+                    </div>
+                </div>
+                
+                <button class="btn" onclick="checkAnswers()">Проверить ответы</button>
+                <div class="result" id="quiz-result"></div>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <div class="container">
+            <p>Максимов Владимир</p>
+        </div>
+    </footer>
+
+    <script>
+        const correctAnswers = [0, 0, 0, 1, 2];
+        const userAnswers = Array(5).fill(null);
+        
+        function showSection(sectionId) {
+            document.getElementById('main-section').style.display = 'none';
+            document.getElementById('content-section').style.display = 'none';
+            document.getElementById('quiz-section').style.display = 'none';
+            document.getElementById(sectionId + '-section').style.display = 'block';
+            document.querySelectorAll('nav ul li').forEach(li => {
+                li.classList.remove('active');
+            });
+        
+            const navItems = document.querySelectorAll('nav ul li a');
+            for (let i = 0; i < navItems.length; i++) {
+                if (navItems[i].getAttribute('onclick') && navItems[i].getAttribute('onclick').includes(sectionId)) {
+                    navItems[i].parentElement.classList.add('active');
+                    break;
+                }
+            }
+        }
+        
+        function selectAnswer(element, questionIndex, answerIndex) {
+            const options = element.parentElement.querySelectorAll('.option');
+            options.forEach(opt => opt.classList.remove('selected'));
+            
+            element.classList.add('selected');
+            
+            userAnswers[questionIndex] = answerIndex;
+        }
+        
+        function checkAnswers() {
+            let correctCount = 0;
+            const questions = document.querySelectorAll('.question');
+            for (let i = 0; i < questions.length; i++) {
+                const options = questions[i].querySelectorAll('.option');
+                options.forEach(opt => {
+                    opt.classList.remove('correct', 'incorrect');
+                });
+                if (userAnswers[i] === null) continue;
+                options[correctAnswers[i]].classList.add('correct');
+                if (userAnswers[i] === correctAnswers[i]) {
+                    correctCount++;
+                } else {
+                    options[userAnswers[i]].classList.add('incorrect');
+                }
+            }
+            const resultElement = document.getElementById('quiz-result');
+            resultElement.textContent = `Вы ответили правильно на ${correctCount} из 5 вопросов!`;
+            if (correctCount === 5) {
+                resultElement.style.color = '#57c785';
+                resultElement.textContent += ' Отличный результат!';
+            } else if (correctCount >= 3) {
+                resultElement.style.color = '#edd553';
+                resultElement.textContent += ' Хороший результат!';
+            } else {
+                resultElement.style.color = '#ff6347';
+                resultElement.textContent += ' Попробуйте еще раз!';
+            }
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            showSection('main');
+        });
+    </script>
+</body>
+</html>
